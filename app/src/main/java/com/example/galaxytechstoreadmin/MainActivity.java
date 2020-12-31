@@ -9,6 +9,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -165,6 +166,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 } else if (id == R.id.nav_account) {
                     gotoFragment("Thông tin tài khoản", new AccountFragment(), AccountFragment);
                 } else if (id == R.id.sign_out) {
+                    FirebaseAuth.getInstance().signOut();
+                    DBqueries.clearData();
+                    DBqueries.email = null;
+                    Intent registerIntent = new Intent(MainActivity.this, Login_Register_ResetPassword_Activity.class);
+                    startActivity(registerIntent);
+                    finish();
                 }
                 drawer.removeDrawerListener(this);
             }

@@ -46,6 +46,7 @@ public class UpdateInfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_update_info, container, false);
+
         name = view.findViewById(R.id.name_et);
         email = view.findViewById(R.id.email_et);
         phone = view.findViewById(R.id.sdt);
