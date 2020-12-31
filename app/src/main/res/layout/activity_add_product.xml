@@ -11,7 +11,7 @@
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/Theme.AdminApp.AppBarOverlay"
+        android:theme="@style/Theme.GalaxyTechStoreAdmin.AppBarOverlay"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -22,7 +22,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="#04D5DD"
             app:layout_scrollFlags="scroll|enterAlways|snap"
-            app:popupTheme="@style/Theme.AdminApp.PopupOverlay">
+            app:popupTheme="@style/Theme.GalaxyTechStoreAdmin.PopupOverlay">
 
         </androidx.appcompat.widget.Toolbar>
 

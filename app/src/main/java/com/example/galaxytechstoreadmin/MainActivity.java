@@ -20,25 +20,26 @@ import android.widget.TextView;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-
-    private BottomNavigationView bottomNavigationView;
-    private DrawerLayout mdrawerLayout;
-    private ActionBarDrawerToggle mtoggle;
-    private Toolbar toolbar;
+    public static Toolbar toolbar;
     private Window window;
     private AppBarLayout.LayoutParams layoutParams;
     public static DrawerLayout drawer;
     private NavigationView navigationView;
-    private TextView actionbar_name;
+    public static TextView actionbar_name;
     private int scrollFlags;
-    private int currentFragment = -1;
-    private static final int HomeFragment = 0;
-    private static final int OrdersFragment = 1;
-    private static final int ProductFragment = 2;
-    private static final int AccountFragment = 3;
+    public static int currentFragment = -1;
+    public static final int HomeFragment = 0;
+    public static final int OrdersFragment = 1;
+    public static final int ProductFragment = 2;
+    public static final int AccountFragment = 3;
+    private FirebaseUser currentUser;
+    private TextView fullname, email;
+    public static boolean resetMainActivity = false;
+    public static MenuItem menuItem;
 
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -100,8 +101,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setFragment(fragment, FragmentNo);
     }
 
-
-    MenuItem menuItem;
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         drawer.closeDrawers();

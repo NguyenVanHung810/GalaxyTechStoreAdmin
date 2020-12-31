@@ -9,7 +9,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/Theme.AdminApp.AppBarOverlay">
+        android:theme="@style/Theme.GalaxyTechStoreAdmin.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -17,7 +17,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="#04D5DD"
             app:layout_scrollFlags="enterAlways"
-            app:popupTheme="@style/Theme.AdminApp.PopupOverlay">
+            app:popupTheme="@style/Theme.GalaxyTechStoreAdmin.PopupOverlay">
 
             <TextView
                 android:id="@+id/actionbar_name"
