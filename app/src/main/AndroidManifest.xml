@@ -16,20 +16,19 @@
         <activity
             android:name=".SplashActivity"
             android:label="@string/title_activity_splash"
-            android:theme="@style/Theme.GalaxyTechStoreAdmin.NoActionBar" />
+            android:theme="@style/Theme.GalaxyTechStoreAdmin.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".AddProductActivity"
             android:label="@string/title_activity_add_product"
             android:theme="@style/Theme.GalaxyTechStoreAdmin.NoActionBar" />
         <activity
             android:name=".MainActivity"
-            android:theme="@style/Theme.GalaxyTechStoreAdmin.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:theme="@style/Theme.GalaxyTechStoreAdmin.NoActionBar"/>
     </application>
 
 </manifest>

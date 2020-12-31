@@ -16,11 +16,17 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -46,7 +52,41 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onStart() {
         super.onStart();
-        setFragment(new HomeFragment(), HomeFragment);
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser == null) {
+            navigationView.getMenu().getItem(navigationView.getMenu().size() - 1).setEnabled(false);
+        } else {
+            if (DBqueries.email == null) {
+                FirebaseFirestore.getInstance().collection("ADMINS").document(currentUser.getUid())
+                        .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DBqueries.fullname = task.getResult().getString("name");
+                            DBqueries.email = task.getResult().getString("email");
+                            DBqueries.phone = task.getResult().getString("phonenumber");
+
+                            fullname.setText(DBqueries.fullname);
+                            email.setText(DBqueries.email);
+                        } else {
+                            String error = task.getException().getMessage();
+                            Toast.makeText(MainActivity.this, error, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            } else {
+                fullname.setText(DBqueries.fullname);
+                email.setText(DBqueries.email);
+            }
+            navigationView.getMenu().getItem(navigationView.getMenu().size() - 1).setEnabled(true);
+        }
+
+        if (resetMainActivity) {
+            resetMainActivity = false;
+            actionbar_name.setVisibility(View.VISIBLE);
+            navigationView.getMenu().getItem(0).setChecked(true);
+            setFragment(new HomeFragment(), HomeFragment);
+        }
         invalidateOptionsMenu();
     }
 
@@ -76,6 +116,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         setFragment(new HomeFragment(), HomeFragment);
+
+        fullname = navigationView.getHeaderView(0).findViewById(R.id.main_name);
+        email = navigationView.getHeaderView(0).findViewById(R.id.main_email);
     }
 
 
@@ -120,6 +163,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 } else if (id == R.id.nav_product) {
                     gotoFragment("Quản lý sản phẩm", new ProductFragment(), ProductFragment);
                 } else if (id == R.id.nav_account) {
+                    gotoFragment("Thông tin tài khoản", new AccountFragment(), AccountFragment);
                 } else if (id == R.id.sign_out) {
                 }
                 drawer.removeDrawerListener(this);

@@ -20,6 +20,8 @@ import java.util.List;
 import es.dmoral.toasty.Toasty;
 
 public class DBqueries {
+
+    public static String email,fullname, phone;
     public static FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     public static List<ProductModel> productModelList = new ArrayList<>();
     public static List<Long> longList = new ArrayList<>();
