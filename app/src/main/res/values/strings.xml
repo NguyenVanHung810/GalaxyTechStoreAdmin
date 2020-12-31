@@ -19,4 +19,5 @@
     </string>
     <string name="title_activity_update_user_info">UpdateUserInfoActivity</string>
     <string name="title_activity_order_details">OrderDetailsActivity</string>
+    <string name="title_activity_update_order_status">UpdateOrderStatusActivity</string>
 </resources>
