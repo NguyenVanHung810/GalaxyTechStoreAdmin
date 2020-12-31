@@ -125,7 +125,9 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.View
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    Intent OrderDetailsIntent = new Intent(itemView.getContext(), OrderDetailsActivity.class);
+                    OrderDetailsIntent.putExtra("position", position);
+                    itemView.getContext().startActivity(OrderDetailsIntent);
                 }
             });
         }
