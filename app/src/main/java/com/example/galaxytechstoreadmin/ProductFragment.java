@@ -96,7 +96,6 @@ public class ProductFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        tb("pause");
     }
 
     private void tb(String s){

@@ -116,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     invalidateOptionsMenu();
                     setFragment(new HomeFragment(), HomeFragment);
                 } else if (id == R.id.nav_orders) {
+                    gotoFragment("Quản lý đơn hàng", new OrderFragment(), OrdersFragment);
                 } else if (id == R.id.nav_product) {
                     gotoFragment("Quản lý sản phẩm", new ProductFragment(), ProductFragment);
                 } else if (id == R.id.nav_account) {
