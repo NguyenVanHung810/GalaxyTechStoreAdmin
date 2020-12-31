@@ -65,7 +65,11 @@ public class AccountFragment extends Fragment {
         changeProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent updateUserInfo = new Intent(getContext(), UpdateUserInfoActivity.class);
+                updateUserInfo.putExtra("Name",name.getText());
+                updateUserInfo.putExtra("Email",email.getText());
+                updateUserInfo.putExtra("Phone", DBqueries.phone);
+                startActivity(updateUserInfo);
             }
         });
 

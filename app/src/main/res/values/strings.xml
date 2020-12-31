@@ -17,4 +17,5 @@
     <string name="title_activity_login__register__reset_password_">
         Login_Register_ResetPassword_Activity
     </string>
+    <string name="title_activity_update_user_info">UpdateUserInfoActivity</string>
 </resources>

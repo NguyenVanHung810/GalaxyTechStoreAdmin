@@ -10,15 +10,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GalaxyTechStoreAdmin">
         <activity
+            android:name=".UpdateUserInfoActivity"
+            android:label="@string/title_activity_update_user_info"
+            android:theme="@style/Theme.GalaxyTechStoreAdmin.NoActionBar"></activity>
+        <activity
             android:name=".Login_Register_ResetPassword_Activity"
             android:label="@string/title_activity_login__register__reset_password_"
-            android:theme="@style/Theme.GalaxyTechStoreAdmin.NoActionBar"></activity>
+            android:theme="@style/Theme.GalaxyTechStoreAdmin.NoActionBar" />
         <activity
             android:name=".SplashActivity"
             android:label="@string/title_activity_splash"
             android:theme="@style/Theme.GalaxyTechStoreAdmin.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -28,7 +33,7 @@
             android:theme="@style/Theme.GalaxyTechStoreAdmin.NoActionBar" />
         <activity
             android:name=".MainActivity"
-            android:theme="@style/Theme.GalaxyTechStoreAdmin.NoActionBar"/>
+            android:theme="@style/Theme.GalaxyTechStoreAdmin.NoActionBar" />
     </application>
 
 </manifest>
