@@ -18,4 +18,5 @@
         Login_Register_ResetPassword_Activity
     </string>
     <string name="title_activity_update_user_info">UpdateUserInfoActivity</string>
+    <string name="title_activity_order_details">OrderDetailsActivity</string>
 </resources>
