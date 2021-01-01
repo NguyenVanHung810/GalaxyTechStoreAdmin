@@ -9,10 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GalaxyTechStoreAdmin">
+        <activity android:name=".UpdateProductActivity"></activity>
         <activity
             android:name=".UpdateOrderStatusActivity"
             android:label="@string/title_activity_update_order_status"
-            android:theme="@style/Theme.GalaxyTechStoreAdmin.NoActionBar"></activity>
+            android:theme="@style/Theme.GalaxyTechStoreAdmin.NoActionBar" />
         <activity
             android:name=".OrderDetailsActivity"
             android:label="@string/title_activity_order_details"
