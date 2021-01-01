@@ -36,6 +36,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.Viewhold
         this.productModelList = productModelList;
     }
 
+    public List<ProductModel> getProductModelList() {
+        return productModelList;
+    }
+
+    public void setProductModelList(List<ProductModel> productModelList) {
+        this.productModelList = productModelList;
+    }
+
 
     @NonNull
     @Override
