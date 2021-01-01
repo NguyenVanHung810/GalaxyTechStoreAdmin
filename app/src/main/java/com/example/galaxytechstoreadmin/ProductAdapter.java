@@ -57,8 +57,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.Viewhold
         String cp = productModelList.get(position).getCuttedPrice();
         boolean pm = productModelList.get(position).getCOD();
         boolean is = productModelList.get(position).getInStock();
+        String cate_id = productModelList.get(position).getCategory_Id();
+        String brand_id = productModelList.get(position).getBrand_Id();
 
-        holder.setData(id, url, desc, tt, rating, tr, pp, cp, pm, position, is);
+        holder.setData(id, url, desc, tt, rating, tr, pp, cp, pm, position, is, cate_id, brand_id);
 
         if (lastposition < position) {
             Animation animation = AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.fade_in);
@@ -96,7 +98,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.Viewhold
             editBtn = (ImageButton) itemView.findViewById(R.id.btn_edit);
         }
 
-        private void setData(String id, String url, String desc, String title, String averageRate, long tr, String pp, String cp, boolean pm, int index, boolean instock) {
+        private void setData(String id, String url, String desc, String title, String averageRate, long tr, String pp, String cp, boolean pm, int index, boolean instock, final String c_id, final String b_id) {
             Glide.with(itemView.getContext()).load(url).apply(new RequestOptions().placeholder(R.drawable.no_img)).into(productImage);
             productTitle.setText(title);
             LinearLayout linearLayout = (LinearLayout) rating.getParent();
@@ -123,6 +125,54 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.Viewhold
                 @Override
                 public void onClick(View v) {
 
+                }
+            });
+
+            deleteBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ProductFragment.deletedialog.show();
+                    ProductFragment.yes.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            FirebaseFirestore.getInstance().collection("CATEGORIES")
+                                    .document(c_id)
+                                    .collection("BRAND")
+                                    .document(b_id)
+                                    .collection("ITEMS")
+                                    .document(id).delete();
+                            FirebaseFirestore.getInstance().collection("CATEGORIES")
+                                    .document("HOME")
+                                    .collection("TOP_DEALS")
+                                    .document("HCbOkJXjK7jRqkBe77oj")
+                                    .collection("ITEMS")
+                                    .document(id).delete();
+                            FirebaseFirestore.getInstance().collection("PRODUCTS").document(id)
+                                    .delete()
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Toasty.success(itemView.getContext(), "Xóa thành công", Toasty.LENGTH_SHORT).show();
+                                            DBqueries.productModelList.clear();
+                                            DBqueries.loadProductList(itemView.getContext(), ProductFragment.loaddialog);
+                                            ProductFragment.productAdapter.notifyDataSetChanged();
+                                            ProductFragment.deletedialog.dismiss();
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toasty.error(itemView.getContext(), "Xóa thất bại", Toasty.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        }
+                    });
+                    ProductFragment.no.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ProductFragment.deletedialog.dismiss();
+                        }
+                    });
                 }
             });
 

@@ -53,7 +53,9 @@ public class DBqueries {
                                 documentSnapshot.get("product_price").toString(),
                                 documentSnapshot.get("cutted_price").toString(),
                                 (boolean) documentSnapshot.get("COD"),
-                                (boolean) documentSnapshot.get("in_stock")
+                                (boolean) documentSnapshot.get("in_stock"),
+                                documentSnapshot.get("Category_Id").toString(),
+                                documentSnapshot.get("Brand_Id").toString()
                         ));
                         index = (long)documentSnapshot.get("index");
                     }
