@@ -14,8 +14,10 @@ public class ProductModel {
     private Boolean COD;
     private Boolean inStock;
     private ArrayList<String> tags;
+    private String Category_Id;
+    private String Brand_Id;
 
-    public ProductModel(String productID, String productImage, String productDesc, String productTitle, String average_Ratings, long total_Ratings, String productPrice, String cuttedPrice, Boolean COD, Boolean inStock) {
+    public ProductModel(String productID, String productImage, String productDesc, String productTitle, String average_Ratings, long total_Ratings, String productPrice, String cuttedPrice, Boolean COD, Boolean inStock, String category_Id, String brand_Id) {
         this.productID = productID;
         this.productImage = productImage;
         this.productDesc = productDesc;
@@ -26,6 +28,8 @@ public class ProductModel {
         this.cuttedPrice = cuttedPrice;
         this.COD = COD;
         this.inStock = inStock;
+        Category_Id = category_Id;
+        Brand_Id = brand_Id;
     }
 
     public String getProductID() {
@@ -114,5 +118,21 @@ public class ProductModel {
 
     public void setTags(ArrayList<String> tags) {
         this.tags = tags;
+    }
+
+    public String getCategory_Id() {
+        return Category_Id;
+    }
+
+    public void setCategory_Id(String category_Id) {
+        Category_Id = category_Id;
+    }
+
+    public String getBrand_Id() {
+        return Brand_Id;
+    }
+
+    public void setBrand_Id(String brand_Id) {
+        Brand_Id = brand_Id;
     }
 }
