@@ -81,6 +81,51 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
             cateName.setText(name);
 
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FirebaseFirestore.getInstance().collection("CATEGORIES").document(id)
+                            .collection("BRAND")
+                            .orderBy("index")
+                            .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if(task.isSuccessful()) {
+                                int size = 0;
+                                for (DocumentSnapshot snapshot : task.getResult()) {
+                                    size++;
+                                }
+                                if (size > 0) {
+                                    Toasty.error(itemView.getContext(), "Danh mục bị ràng buộc", Toasty.LENGTH_SHORT).show();
+                                }
+                                else {
+                                    FirebaseStorage.getInstance().getReference().child("category_image/")
+                                            .child("cate_image_"+ String.valueOf(index) + ".jpg").delete();
+                                    FirebaseFirestore.getInstance().collection("CATEGORIES").document(id)
+                                            .delete()
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    Toasty.success(itemView.getContext(), "Xóa thành công", Toasty.LENGTH_SHORT).show();
+                                                    DBqueries.categoryModelList.clear();
+                                                    DBqueries.s = 0;
+                                                    DBqueries.loadCategoryList(itemView.getContext(), CategoryFragment.loaddialog);
+                                                    CategoryFragment.categoryAdapter.notifyDataSetChanged();
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Toasty.error(itemView.getContext(), "Xóa thất bại", Toasty.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                }
+                            }
+                        }
+                    });
+                }
+            });
+
             edit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
