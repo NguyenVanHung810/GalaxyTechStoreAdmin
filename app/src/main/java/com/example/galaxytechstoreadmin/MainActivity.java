@@ -82,7 +82,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
             navigationView.getMenu().getItem(navigationView.getMenu().size() - 1).setEnabled(true);
         }
-
         if (resetMainActivity) {
             resetMainActivity = false;
             actionbar_name.setVisibility(View.VISIBLE);
