@@ -25,7 +25,7 @@ public class AccountFragment extends Fragment {
     private Dialog loadingDialog;
 
     public AccountFragment() {
-        // Required empty public constructor
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -56,7 +56,7 @@ public class AccountFragment extends Fragment {
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
                 DBqueries.clearData();
-                DBqueries.email=null;  //my code
+                DBqueries.email=null;
                 startActivity(new Intent(getContext(), Login_Register_ResetPassword_Activity.class));
                 getActivity().finish();
             }
