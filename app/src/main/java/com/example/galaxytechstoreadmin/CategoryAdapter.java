@@ -136,7 +136,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    Intent brandListIntent = new Intent(itemView.getContext(), BrandActivity.class);
+                    brandListIntent.putExtra("position", position);
+                    itemView.getContext().startActivity(brandListIntent);
                 }
             });
         }
