@@ -31,6 +31,11 @@ public class DBqueries {
 
     public static int s = 0;
 
+    public static int productTotals = 0;
+    public static int userTotals = 0;
+    public static int cateTotals = 0;
+    public static int orderTotals = 0;
+
     public static List<OrderItemModel> orderItemModelList = new ArrayList<>();
 
     public static void clearData(){
@@ -173,6 +178,50 @@ public class DBqueries {
                 else {
                     String error = task.getException().toString();
                     Toasty.error(context, error, Toasty.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    public static void getUserTotals() {
+        firebaseFirestore.collection("USERS").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                for (DocumentSnapshot snapshot : task.getResult()) {
+                    userTotals++;
+                }
+            }
+        });
+    }
+
+    public static void getProductTotals() {
+        firebaseFirestore.collection("PRODUCTS").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                for (DocumentSnapshot snapshot : task.getResult()) {
+                    productTotals++;
+                }
+            }
+        });
+    }
+
+    public static void getOrderTotals() {
+        firebaseFirestore.collection("ORDERS").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                for (DocumentSnapshot snapshot : task.getResult()) {
+                    orderTotals++;
+                }
+            }
+        });
+    }
+
+    public static void getCateTotals() {
+        firebaseFirestore.collection("CATEGORIES").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                for (DocumentSnapshot snapshot : task.getResult()) {
+                    cateTotals++;
                 }
             }
         });

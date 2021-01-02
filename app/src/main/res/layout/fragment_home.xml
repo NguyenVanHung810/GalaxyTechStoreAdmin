@@ -23,6 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+            <include layout="@layout/dashboard_layout"></include>
             <include layout="@layout/product_management_layout"></include>
             <include layout="@layout/order_management_layout"></include>
             <include layout="@layout/account_info_layout"></include>
