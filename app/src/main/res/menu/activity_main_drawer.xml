@@ -22,6 +22,12 @@
 
         <item
             android:checkable="true"
+            android:id="@+id/nav_category"
+            android:icon="@drawable/cate"
+            android:title="Quản lý danh mục" />
+
+        <item
+            android:checkable="true"
             android:id="@+id/nav_account"
             android:icon="@drawable/ac"
             android:title="Thông tin tài khoản" />

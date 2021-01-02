@@ -24,8 +24,12 @@ public class DBqueries {
     public static String email,fullname, phone;
     public static FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     public static List<ProductModel> productModelList = new ArrayList<>();
+    public static List<CategoryModel> categoryModelList = new ArrayList<>();
     public static List<Long> longList = new ArrayList<>();
-    public static long index;
+    public static long product_index;
+    public static long cate_index;
+
+    public static int s = 0;
 
     public static List<OrderItemModel> orderItemModelList = new ArrayList<>();
 
@@ -33,6 +37,56 @@ public class DBqueries {
         productModelList.clear();
         longList.clear();
         orderItemModelList.clear();
+        categoryModelList.clear();
+    }
+
+    public static void loadCategoryList(Context context, Dialog dialog) {
+        categoryModelList.clear();
+        firebaseFirestore.collection("CATEGORIES")
+                .orderBy("index")
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                        if(s==0){
+                            s = -1;
+                        }
+                        else {
+                            List<BrandModel> brandModelList = new ArrayList<>();
+                            firebaseFirestore.collection("CATEGORIES").document(documentSnapshot.getId()).collection("BRAND")
+                                    .orderBy("index").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if(task.isSuccessful()){
+                                        for (DocumentSnapshot snapshot: task.getResult()){
+                                            brandModelList.add(new BrandModel(
+                                                    snapshot.getId(),
+                                                    snapshot.get("layout_title").toString()
+                                            ));
+                                        }
+                                    }
+                                }
+                            });
+                            categoryModelList.add(new CategoryModel(
+                                    documentSnapshot.getId(),
+                                    documentSnapshot.get("icon").toString(),
+                                    documentSnapshot.get("categoryName").toString(),
+                                    (long)documentSnapshot.get("index"),
+                                    brandModelList
+                            ));
+                        }
+                        cate_index = (long) documentSnapshot.get("index");
+                    }
+                    CategoryFragment.categoryAdapter.notifyDataSetChanged();
+                    dialog.dismiss();
+                } else {
+                    dialog.dismiss();
+                    String error = task.getException().getMessage();
+                    Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     public static void loadProductList(Context context, Dialog dialog) {
@@ -57,7 +111,7 @@ public class DBqueries {
                                 documentSnapshot.get("Category_Id").toString(),
                                 documentSnapshot.get("Brand_Id").toString()
                         ));
-                        index = (long)documentSnapshot.get("index");
+                        product_index = (long)documentSnapshot.get("index");
                     }
                     ProductFragment.productAdapter.notifyDataSetChanged();
                     dialog.dismiss();

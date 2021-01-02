@@ -42,7 +42,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final int HomeFragment = 0;
     public static final int OrdersFragment = 1;
     public static final int ProductFragment = 2;
-    public static final int AccountFragment = 3;
+    public static final int CategoryFragment = 3;
+    public static final int AccountFragment = 4;
     private FirebaseUser currentUser;
     private TextView fullname, email;
     public static boolean resetMainActivity = false;
@@ -163,7 +164,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     gotoFragment("Quản lý đơn hàng", new OrderFragment(), OrdersFragment);
                 } else if (id == R.id.nav_product) {
                     gotoFragment("Quản lý sản phẩm", new ProductFragment(), ProductFragment);
-                } else if (id == R.id.nav_account) {
+                } else if (id == R.id.nav_category) {
+                    gotoFragment("Quản lý danh mục", new CategoryFragment(), CategoryFragment);
+                }else if (id == R.id.nav_account) {
                     gotoFragment("Thông tin tài khoản", new AccountFragment(), AccountFragment);
                 } else if (id == R.id.sign_out) {
                     FirebaseAuth.getInstance().signOut();
