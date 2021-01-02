@@ -227,7 +227,7 @@ public class AddProductActivity extends AppCompatActivity {
                 Map<String, Object> product = new HashMap<>();
 
                 // số thứ tự sản phẩm
-                product.put("index", DBqueries.index + 1);
+                product.put("index", DBqueries.product_index + 1);
 
                 // Do mới tạo ra sản phẩm sẽ chưa có ai đánh giá nên các giá trị liên quan đến việc rating đều đưa về bằng 0.
                 // số lượng 1 sao
