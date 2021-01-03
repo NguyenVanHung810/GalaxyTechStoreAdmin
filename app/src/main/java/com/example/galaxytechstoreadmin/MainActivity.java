@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private AppBarLayout.LayoutParams layoutParams;
     public static DrawerLayout drawer;
     private NavigationView navigationView;
-    public static TextView actionbar_name;
+    public static ImageView actionbar_name;
     private int scrollFlags;
     public static int currentFragment = -1;
     public static final int HomeFragment = 0;
@@ -98,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
         toolbar = findViewById(R.id.toolbar);
-        actionbar_name = (TextView) findViewById(R.id.actionbar_name);
+        actionbar_name = (ImageView) findViewById(R.id.actionbar_name);
         setSupportActionBar(toolbar);
 
         window = getWindow();

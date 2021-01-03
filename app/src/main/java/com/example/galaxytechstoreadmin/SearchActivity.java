@@ -83,6 +83,7 @@ public class SearchActivity extends AppCompatActivity {
                                             , true
                                             , documentSnapshot.getString("Category_Id").toString()
                                             , documentSnapshot.getString("Brand_Id").toString()
+                                            , (long) documentSnapshot.get("index")
                                     );
 
                                     model.setTags((ArrayList<String>) documentSnapshot.get("tags"));

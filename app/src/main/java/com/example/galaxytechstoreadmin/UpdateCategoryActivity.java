@@ -88,7 +88,9 @@ public class UpdateCategoryActivity extends AppCompatActivity {
         save = (Button) findViewById(R.id.add_btn);
         cancel = (Button) findViewById(R.id.cancel_btn);
 
-        Glide.with(getApplicationContext()).load(categoryModel.getCategoryImage()).into(image);
+        if(!categoryModel.getCategoryImage().toString().equals("")){
+            Glide.with(getApplicationContext()).load(categoryModel.getCategoryImage()).into(image);
+        }
         name.setText(categoryModel.getCategoryName().toString());
 
         name.addTextChangedListener(new TextWatcher() {
@@ -154,13 +156,8 @@ public class UpdateCategoryActivity extends AppCompatActivity {
 
     private void checkInputs() {
         if (!TextUtils.isEmpty(name.getText())) {
-            if (!TextUtils.isEmpty(name.getText())) {
-                save.setEnabled(true);
-                save.setTextColor(Color.rgb(255, 255, 255));
-            } else {
-                save.setEnabled(false);
-                save.setTextColor(Color.argb(50, 255, 255, 255));
-            }
+            save.setEnabled(true);
+            save.setTextColor(Color.rgb(255, 255, 255));
         } else {
             save.setEnabled(false);
             save.setTextColor(Color.argb(50, 255, 255, 255));
@@ -168,6 +165,8 @@ public class UpdateCategoryActivity extends AppCompatActivity {
     }
 
     private void updatePic(String id, Long index) {
+        save.setEnabled(false);
+        save.setTextColor(Color.argb(50, 255, 255, 255));
         if (updatePhoto) {
             final StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("category_image/" + "cate_image_"+ String.valueOf(index) + ".jpg");
             if (uri != null) {

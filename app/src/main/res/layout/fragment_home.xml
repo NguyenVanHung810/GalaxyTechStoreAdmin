@@ -25,6 +25,7 @@
 
             <include layout="@layout/dashboard_layout"></include>
             <include layout="@layout/product_management_layout"></include>
+            <include layout="@layout/category_management_layout"></include>
             <include layout="@layout/order_management_layout"></include>
             <include layout="@layout/account_info_layout"></include>
         </LinearLayout>

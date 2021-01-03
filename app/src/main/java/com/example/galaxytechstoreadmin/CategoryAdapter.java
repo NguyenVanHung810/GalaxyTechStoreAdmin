@@ -109,7 +109,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                                                     Toasty.success(itemView.getContext(), "Xóa thành công", Toasty.LENGTH_SHORT).show();
                                                     DBqueries.categoryModelList.clear();
                                                     DBqueries.s = 0;
-                                                    DBqueries.loadCategoryList(itemView.getContext(), CategoryFragment.loaddialog);
+                                                    if(DBqueries.categoryModelList.size() == 0){
+                                                        DBqueries.loadCategoryList(itemView.getContext(), CategoryFragment.loaddialog);
+                                                    }
+                                                    else {
+                                                        CategoryFragment.loaddialog.dismiss();
+                                                    }
                                                     CategoryFragment.categoryAdapter.notifyDataSetChanged();
                                                 }
                                             })
@@ -129,7 +134,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             edit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    Intent updateProductIntent = new Intent(itemView.getContext(), UpdateCategoryActivity.class);
+                    updateProductIntent.putExtra("id", id);
+                    updateProductIntent.putExtra("position", position);
+                    itemView.getContext().startActivity(updateProductIntent);
                 }
             });
 

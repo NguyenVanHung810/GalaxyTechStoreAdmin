@@ -18,18 +18,25 @@ public class BrandActivity extends AppCompatActivity {
     private LinearLayout addBrand;
     private RecyclerView brandRecyclerView;
     public static BrandAdapter brandAdapter;
-    private Dialog loaddialog;
-    private int position;
-
+    public static Dialog loaddialog;
+    public static int position;
+    public static CategoryModel categoryModel;
 
     public static List<BrandModel> brandModelList;
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        finish();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_brand);
 
         position = getIntent().getIntExtra("position", -1);
-        final CategoryModel categoryModel = DBqueries.categoryModelList.get(position);
+        categoryModel = DBqueries.categoryModelList.get(position);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -60,7 +67,9 @@ public class BrandActivity extends AppCompatActivity {
         addBrand.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent AddBrandIntent = new Intent(getApplicationContext(), AddBrandActivity.class);
+                AddBrandIntent.putExtra("position", getIntent().getIntExtra("position", -1));
+                startActivity(AddBrandIntent);
             }
         });
     }

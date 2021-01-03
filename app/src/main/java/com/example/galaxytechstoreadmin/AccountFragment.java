@@ -35,10 +35,10 @@ public class AccountFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_account, container, false);
 
         // init
-        name=root.findViewById(R.id.user_name);
-        email=root.findViewById(R.id.user_email);
-        layoutContainer=root.findViewById(R.id.layout_container);
-        signOutBtn=root.findViewById(R.id.sign_out);
+        name = root.findViewById(R.id.user_name);
+        email = root.findViewById(R.id.user_email);
+        layoutContainer = root.findViewById(R.id.layout_container);
+        signOutBtn = root.findViewById(R.id.sign_out);
         changeProfile = root.findViewById(R.id.change_profile_btn);
         // init
 
@@ -56,7 +56,7 @@ public class AccountFragment extends Fragment {
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
                 DBqueries.clearData();
-                DBqueries.email=null;
+                DBqueries.email = null;
                 startActivity(new Intent(getContext(), Login_Register_ResetPassword_Activity.class));
                 getActivity().finish();
             }
@@ -66,15 +66,21 @@ public class AccountFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent updateUserInfo = new Intent(getContext(), UpdateUserInfoActivity.class);
-                updateUserInfo.putExtra("Name",name.getText());
-                updateUserInfo.putExtra("Email",email.getText());
+                updateUserInfo.putExtra("Name", name.getText());
+                updateUserInfo.putExtra("Email", email.getText());
                 updateUserInfo.putExtra("Phone", DBqueries.phone);
                 startActivity(updateUserInfo);
             }
         });
 
         loadingDialog.dismiss();
-
         return root;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        name.setText(DBqueries.fullname);
+        email.setText(DBqueries.email);
     }
 }

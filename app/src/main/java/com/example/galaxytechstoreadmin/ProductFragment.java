@@ -31,7 +31,6 @@ public class ProductFragment extends Fragment {
     public static Button yes;
     public static Button no;
 
-
     public ProductFragment() {
         // Required empty public constructor
     }
@@ -64,15 +63,26 @@ public class ProductFragment extends Fragment {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        layoutManager.onSaveInstanceState();
         productRecycleView.setLayoutManager(layoutManager);
 
         productAdapter = new ProductAdapter(DBqueries.productModelList);
         productRecycleView.setAdapter(productAdapter);
 
-        DBqueries.loadProductList(getContext(), loaddialog);
-        productAdapter.notifyDataSetChanged();
-
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        DBqueries.productModelList.clear();
+        loaddialog.show();
+        if(DBqueries.productModelList.size() == 0){
+            DBqueries.loadProductList(getContext(), loaddialog);
+        }
+        else {
+            loaddialog.dismiss();
+        }
     }
 
     @Override
@@ -87,6 +97,9 @@ public class ProductFragment extends Fragment {
             case R.id.add_product:
                 startActivity(new Intent(getContext(), AddProductActivity.class));
                 return false;
+            case R.id.search_product:
+                startActivity(new Intent(getContext(), SearchActivity.class));
+                return false;
             default:
                 break;
         }
@@ -98,7 +111,4 @@ public class ProductFragment extends Fragment {
         super.onPause();
     }
 
-    private void tb(String s){
-        Toasty.error(getContext(), s, Toasty.LENGTH_SHORT).show();
-    }
 }

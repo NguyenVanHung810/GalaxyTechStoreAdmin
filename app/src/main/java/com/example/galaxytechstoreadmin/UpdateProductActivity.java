@@ -14,6 +14,9 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -46,6 +49,8 @@ import java.util.Map;
 
 import es.dmoral.toasty.Toasty;
 
+import static com.pchmn.androidverify.App.getContext;
+
 public class UpdateProductActivity extends AppCompatActivity {
 
     private EditText title, price, cutted_price, desc;
@@ -54,13 +59,13 @@ public class UpdateProductActivity extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private ImageButton delete_img, change_img;
 
-    private EditText stock_quantity, max_quantity;
-
     private Spinner cateSpinner;
     private Spinner brandSpinner;
 
     private Boolean updatePhoto = false;
     private Uri uri;
+
+    private ProductModel productModel;
 
     int id_cate = 0;
     int id_brand = 0;
@@ -115,18 +120,16 @@ public class UpdateProductActivity extends AppCompatActivity {
         change_img = (ImageButton) findViewById(R.id.change_img_btn);
         cateSpinner = (Spinner) findViewById(R.id.spinner_category);
         brandSpinner = (Spinner) findViewById(R.id.spinner_brand);
-        stock_quantity = (EditText) findViewById(R.id.stock_quantity);
-        max_quantity = (EditText) findViewById(R.id.max_quantity);
 
-        final ProductModel productModel = DBqueries.productModelList.get(intent.getIntExtra("position", -1));
+        productModel = DBqueries.productModelList.get(intent.getIntExtra("position", -1));
 
         title.setText(productModel.getProductTitle());
         price.setText(productModel.getProductPrice());
         cutted_price.setText(productModel.getCuttedPrice());
         desc.setText(productModel.getProductDesc());
-        Glide.with(getApplicationContext()).load(productModel.getProductImage()).apply(new RequestOptions().placeholder(R.drawable.no_img)).into(image);
-
-        String id = intent.getStringExtra("id");
+        if(!productModel.getProductImage().equals("")){
+            Glide.with(getApplicationContext()).load(productModel.getProductImage()).apply(new RequestOptions().placeholder(R.drawable.no_img)).into(image);
+        }
 
         categoryIdList = new ArrayList<String>();
         categoryNameList = new ArrayList<String>();
@@ -210,16 +213,86 @@ public class UpdateProductActivity extends AppCompatActivity {
             }
         });
 
-        position_cate = adapter.getPosition("Laptop");
-        cateSpinner.setSelection(position_cate);
+        title.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-        position_brand = adapter.getPosition("Acer");
-        brandSpinner.setSelection(position_brand);
+            }
 
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                checkInputs();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        price.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                checkInputs();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        cutted_price.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                checkInputs();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        desc.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                checkInputs();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
 
         save = (Button) findViewById(R.id.add_btn);
         cancel = (Button) findViewById(R.id.cancel_btn);
 
+
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                save.setEnabled(false);
+                save.setTextColor(Color.argb(50, 255, 255, 255));
+                updatePic(productModel.getIndex(), categoryIdList.get(id_cate), brandIdList.get(id_brand));
+            }
+        });
 
 
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -232,6 +305,8 @@ public class UpdateProductActivity extends AppCompatActivity {
         delete_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                uri = null;
+                updatePhoto = true;
                 Glide.with(getApplicationContext()).load(R.drawable.no_img).into(image);
             }
         });
@@ -256,6 +331,31 @@ public class UpdateProductActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void checkInputs() {
+        if (!TextUtils.isEmpty(title.getText())) {
+            if (!TextUtils.isEmpty(price.getText())) {
+                if (!TextUtils.isEmpty(cutted_price.getText())) {
+                    if (!TextUtils.isEmpty(desc.getText())) {
+                        save.setEnabled(true);
+                        save.setTextColor(Color.rgb(255, 255, 255));
+                    } else {
+                        save.setEnabled(false);
+                        save.setTextColor(Color.argb(50, 255, 255, 255));
+                    }
+                } else {
+                    save.setEnabled(false);
+                    save.setTextColor(Color.argb(50, 255, 255, 255));
+                }
+            } else {
+                save.setEnabled(false);
+                save.setTextColor(Color.argb(50, 255, 255, 255));
+            }
+        } else {
+            save.setEnabled(false);
+            save.setTextColor(Color.argb(50, 255, 255, 255));
+        }
     }
 
     @Override
@@ -289,47 +389,183 @@ public class UpdateProductActivity extends AppCompatActivity {
         }
     }
 
-    private void updatePic(String product_id) {
-        final StorageReference storageReference= FirebaseStorage.getInstance().getReference().child("pi/"+product_id+".jpg");
-        Glide.with(getApplicationContext()).asBitmap().load(uri).centerCrop().into(new ImageViewTarget<Bitmap>(image) {
-            @Override
-            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                resource.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                byte[] data = baos.toByteArray();
-                UploadTask uploadTask = storageReference.putBytes(data);
-                uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+    private void updatePic(long index, String cate_id, String brand_id) {
+        if (updatePhoto) {
+            final StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("product_image/" + "product_image_"+ String.valueOf(index) + ".jpg");
+            if(uri != null) {
+                Glide.with(getApplicationContext()).asBitmap().load(uri).centerCrop().into(new ImageViewTarget<Bitmap>(image) {
                     @Override
-                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                        if(task.isSuccessful()){
-                            storageReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Uri> task) {
-                                    if(task.isSuccessful()){
-                                        uri=task.getResult();
-                                    }else {
-                                        loadingDialog.dismiss();
-                                        String error=task.getException().getMessage();
-                                        Toast.makeText(getApplicationContext(), error,Toast.LENGTH_SHORT).show();
-                                    }
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        resource.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                        byte[] data = baos.toByteArray();
+                        UploadTask uploadTask = storageReference.putBytes(data);
+                        uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    storageReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Uri> task) {
+                                            if (task.isSuccessful()) {
+                                                uri = task.getResult();
+
+                                                Map<String, Object> productData = new HashMap<>();
+                                                productData.put("product_price", price.getText().toString());
+                                                productData.put("product_title", title.getText().toString());
+                                                productData.put("product_description", desc.getText().toString());
+                                                productData.put("cutted_price", cutted_price.getText().toString());
+                                                productData.put("product_image", uri.toString());
+                                                productData.put("Category_Id", categoryIdList.get(id_cate));
+                                                productData.put("Brand_Id", brandIdList.get(id_brand));
+                                                ArrayList<String> tag = new ArrayList<>();
+                                                tag.add(categoryNameList.get(id_cate));
+                                                tag.add(brandNameList.get(id_brand));
+                                                tag.add(title.getText().toString());
+                                                tag.add(categoryNameList.get(id_cate).toUpperCase());
+                                                tag.add(categoryNameList.get(id_cate).toLowerCase());
+                                                tag.add(brandNameList.get(id_brand).toLowerCase());
+                                                tag.add(brandNameList.get(id_brand).toUpperCase());
+                                                productData.put("tags", tag);
+
+                                                Map<String, Object> home_item = new HashMap<>();
+                                                home_item.put("product_image", uri.toString());
+                                                home_item.put("product_title", title.getText().toString());
+                                                home_item.put("product_price", price.getText().toString());
+
+                                                Map<String, Object> cate_item = new HashMap<>();
+                                                cate_item.put("product_image", uri.toString());
+                                                cate_item.put("product_subtitle", "Hàng chính hãng");
+                                                cate_item.put("product_title", title.getText().toString());
+                                                cate_item.put("product_price", price.getText().toString());
+                                                updateFields(cate_id, brand_id, productData, home_item, cate_item);
+                                            } else {
+                                                loadingDialog.dismiss();
+                                                String error = task.getException().getMessage();
+                                                Toast.makeText(getApplicationContext(), error, Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    loadingDialog.dismiss();
+                                    String error = task.getException().getMessage();
+                                    Toast.makeText(getApplicationContext(), error, Toast.LENGTH_SHORT).show();
                                 }
-                            });
-                        }else {
+                            }
+                        });
+                        return;
+                    }
+
+                    @Override
+                    protected void setResource(@Nullable Bitmap resource) {
+                        image.setImageResource(R.drawable.no_img);
+                    }
+                });
+            }
+            else {
+                storageReference.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Map<String, Object> productData = new HashMap<>();
+                            productData.put("product_price", price.getText().toString());
+                            productData.put("product_title", title.getText().toString());
+                            productData.put("product_description", desc.getText().toString());
+                            productData.put("cutted_price", cutted_price.getText().toString());
+                            productData.put("product_image", "");
+                            productData.put("Category_Id", categoryIdList.get(id_cate));
+                            productData.put("Brand_Id", brandIdList.get(id_brand));
+                            ArrayList<String> tag = new ArrayList<>();
+                            tag.add(categoryNameList.get(id_cate));
+                            tag.add(brandNameList.get(id_brand));
+                            tag.add(title.getText().toString());
+                            tag.add(categoryNameList.get(id_cate).toUpperCase());
+                            tag.add(categoryNameList.get(id_cate).toLowerCase());
+                            tag.add(brandNameList.get(id_brand).toLowerCase());
+                            tag.add(brandNameList.get(id_brand).toUpperCase());
+                            productData.put("tags", tag);
+
+                            Map<String, Object> home_item = new HashMap<>();
+                            home_item.put("product_image", "");
+                            home_item.put("product_title", title.getText().toString());
+                            home_item.put("product_price", price.getText().toString());
+
+                            Map<String, Object> cate_item = new HashMap<>();
+                            cate_item.put("product_image", "");
+                            cate_item.put("product_subtitle", "Hàng chính hãng");
+                            cate_item.put("product_title", title.getText().toString());
+                            cate_item.put("product_price", price.getText().toString());
+                            updateFields(cate_id, brand_id, productData, home_item, cate_item);
+                        } else {
                             loadingDialog.dismiss();
-                            String error=task.getException().getMessage();
-                            Toast.makeText(getApplicationContext(), error,Toast.LENGTH_SHORT).show();
+                            String error = task.getException().getMessage();
+                            Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
-                return;
             }
+        }
+        else {
+            Map<String, Object> productData = new HashMap<>();
+            productData.put("product_price", price.getText().toString());
+            productData.put("product_title", title.getText().toString());
+            productData.put("product_description", desc.getText().toString());
+            productData.put("cutted_price", cutted_price.getText().toString());
+            productData.put("Category_Id", categoryIdList.get(id_cate));
+            productData.put("Brand_Id", brandIdList.get(id_brand));
+            ArrayList<String> tag = new ArrayList<>();
+            tag.add(categoryNameList.get(id_cate));
+            tag.add(brandNameList.get(id_brand));
+            tag.add(title.getText().toString());
+            tag.add(categoryNameList.get(id_cate).toUpperCase());
+            tag.add(categoryNameList.get(id_cate).toLowerCase());
+            tag.add(brandNameList.get(id_brand).toLowerCase());
+            tag.add(brandNameList.get(id_brand).toUpperCase());
+            productData.put("tags", tag);
 
-            @Override
-            protected void setResource(@Nullable Bitmap resource) {
-                image.setImageResource(R.drawable.no_img);
-            }
-        });
+            Map<String, Object> home_item = new HashMap<>();
+            home_item.put("product_title", title.getText().toString());
+            home_item.put("product_price", price.getText().toString());
 
+            Map<String, Object> cate_item = new HashMap<>();
+            cate_item.put("product_image", productModel.getProductImage());
+            cate_item.put("product_subtitle", "Hàng chính hãng");
+            cate_item.put("product_title", title.getText().toString());
+            cate_item.put("product_price", price.getText().toString());
+            updateFields(cate_id, brand_id, productData, home_item, cate_item);
+        }
+    }
+
+    private void updateFields(String cate_id, String brand_id, final Map<String, Object> productData, final Map<String, Object> home_item, final Map<String, Object> cate_item){
+        db.collection("PRODUCTS").document(productModel.getProductID())
+                .update(productData)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            db.collection("CATEGORIES").document(productModel.getCategory_Id()).collection("BRAND")
+                                    .document(productModel.getBrand_Id())
+                                    .collection("ITEMS")
+                                    .document(productModel.getProductID()).delete();
+                            db.collection("CATEGORIES").document(cate_id).collection("BRAND")
+                                    .document(brand_id)
+                                    .collection("ITEMS")
+                                    .document(productModel.getProductID()).set(cate_item);
+                            db.collection("CATEGORIES").document("HOME").collection("TOP_DEALS")
+                                    .document("HCbOkJXjK7jRqkBe77oj")
+                                    .collection("ITEMS")
+                                    .document(productModel.getProductID())
+                                    .update(home_item);
+                            DBqueries.productModelList.clear();
+                            Toasty.success(getApplicationContext(),"Cập nhật thành công !!!", Toasty.LENGTH_SHORT).show();
+                            finish();
+                        }
+                        else {
+                            Toasty.success(getApplicationContext(),"Cập nhật thất bại !!!", Toasty.LENGTH_SHORT).show();
+                            finish();
+                        }
+                    }
+                });
     }
 
     @Override

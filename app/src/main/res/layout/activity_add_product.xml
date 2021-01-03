@@ -100,7 +100,7 @@
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:textColor="#000000"
-                android:textColorHint="#000000"
+                android:textColorHint="@color/md_red_500"
                 android:textSize="20dp" />
 
             <EditText
@@ -110,12 +110,12 @@
                 android:layout_margin="5dp"
                 android:background="@drawable/edittext_background"
                 android:ems="10"
-                android:hint="Giá gốc sản phẩm"
+                android:hint="Giá sản phẩm được giảm"
                 android:inputType="textPersonName"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:textColor="#000000"
-                android:textColorHint="#000000"
+                android:textColorHint="@color/md_red_500"
                 android:textSize="20dp" />
 
 
@@ -126,42 +126,12 @@
                 android:layout_margin="5dp"
                 android:background="@drawable/edittext_background"
                 android:ems="10"
-                android:hint="Giá đã được giảm"
+                android:hint="Giá gốc sản phẩm"
                 android:inputType="textPersonName"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:textColor="#000000"
-                android:textColorHint="#000000"
-                android:textSize="20dp" />
-
-            <EditText
-                android:id="@+id/stock_quantity"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_margin="5dp"
-                android:background="@drawable/edittext_background"
-                android:ems="10"
-                android:hint="Số lượng sản phẩm ban đầu"
-                android:inputType="number"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:textColor="#000000"
-                android:textColorHint="#000000"
-                android:textSize="20dp" />
-
-            <EditText
-                android:id="@+id/max_quantity"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_margin="5dp"
-                android:background="@drawable/edittext_background"
-                android:ems="10"
-                android:hint="Số lượng còn lại"
-                android:inputType="number"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:textColor="#000000"
-                android:textColorHint="#000000"
+                android:textColorHint="@color/md_red_500"
                 android:textSize="20dp" />
 
             <Spinner
@@ -200,7 +170,7 @@
                 android:paddingTop="20dp"
                 android:paddingRight="20dp"
                 android:textColor="#000000"
-                android:textColorHint="#000000"
+                android:textColorHint="@color/md_red_500"
                 android:textSize="20dp" />
 
             <LinearLayout

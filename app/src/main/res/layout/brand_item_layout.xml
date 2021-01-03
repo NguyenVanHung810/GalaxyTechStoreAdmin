@@ -46,25 +46,22 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
+        <Button
             android:id="@+id/edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="2dp"
             android:layout_weight="1"
-            android:background="@color/md_red_500"
+            android:backgroundTint="@color/md_red_500"
             android:gravity="center"
             android:padding="8dp"
             android:text="Sửa"
             android:textSize="12dp" />
 
-        <TextView
+        <Button
             android:id="@+id/delete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="2dp"
             android:layout_weight="1"
-            android:background="@color/md_blue_500"
             android:gravity="center"
             android:padding="8dp"
             android:text="Xóa"

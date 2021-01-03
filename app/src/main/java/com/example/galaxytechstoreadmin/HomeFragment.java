@@ -19,7 +19,7 @@ import static com.example.galaxytechstoreadmin.MainActivity.currentFragment;
 
 public class HomeFragment extends Fragment {
 
-    private ConstraintLayout pm, om, ai;
+    private ConstraintLayout pm, om, ai, cm;
     private TextView ut, pt, ot, ct;
 
 
@@ -34,6 +34,7 @@ public class HomeFragment extends Fragment {
         pm = view.findViewById(R.id.pm_layout);
         om = view.findViewById(R.id.om_layout);
         ai = view.findViewById(R.id.ai_layout);
+        cm = view.findViewById(R.id.cm_layout);
         ut = view.findViewById(R.id.user_total);
         pt = view.findViewById(R.id.product_total);
         ot = view.findViewById(R.id.order_total);
@@ -73,6 +74,14 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 gotoFragment("Quản lý đơn hàng", new OrderFragment(), MainActivity.OrdersFragment);
+            }
+        });
+
+        cm.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+            @Override
+            public void onClick(View v) {
+                gotoFragment("Quản lý danh mục", new CategoryFragment(), MainActivity.CategoryFragment);
             }
         });
 

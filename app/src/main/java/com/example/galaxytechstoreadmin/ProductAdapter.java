@@ -20,6 +20,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.text.NumberFormat;
 import java.util.List;
@@ -67,8 +68,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.Viewhold
         boolean is = productModelList.get(position).getInStock();
         String cate_id = productModelList.get(position).getCategory_Id();
         String brand_id = productModelList.get(position).getBrand_Id();
+        long index = productModelList.get(position).getIndex();
 
-        holder.setData(id, url, desc, tt, rating, tr, pp, cp, pm, position, is, cate_id, brand_id);
+        holder.setData(index, id, url, desc, tt, rating, tr, pp, cp, pm, position, is, cate_id, brand_id);
 
         if (lastposition < position) {
             Animation animation = AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.fade_in);
@@ -106,7 +108,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.Viewhold
             editBtn = (ImageButton) itemView.findViewById(R.id.btn_edit);
         }
 
-        private void setData(String id, String url, String desc, String title, String averageRate, long tr, String pp, String cp, boolean pm, int index, boolean instock, final String c_id, final String b_id) {
+        private void setData(long index, String id, String url, String desc, String title, String averageRate, long tr, String pp, String cp, boolean pm, int position, boolean instock, final String c_id, final String b_id) {
             Glide.with(itemView.getContext()).load(url).apply(new RequestOptions().placeholder(R.drawable.no_img)).into(productImage);
             productTitle.setText(title);
             LinearLayout linearLayout = (LinearLayout) rating.getParent();
@@ -132,7 +134,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.Viewhold
             editBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    Intent updateProductIntent = new Intent(itemView.getContext(), UpdateProductActivity.class);
+                    updateProductIntent.putExtra("id", id);
+                    updateProductIntent.putExtra("position", position);
+                    itemView.getContext().startActivity(updateProductIntent);
                 }
             });
 
@@ -143,6 +148,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.Viewhold
                     ProductFragment.yes.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            FirebaseStorage.getInstance().getReference().child("product_image/")
+                                    .child("product_image_"+ String.valueOf(index) + ".jpg").delete();
                             FirebaseFirestore.getInstance().collection("CATEGORIES")
                                     .document(c_id)
                                     .collection("BRAND")
@@ -187,7 +194,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.Viewhold
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    Intent productDetailsIntent = new Intent(itemView.getContext(), ProductDetailsActivity.class);
+                    productDetailsIntent.putExtra("PRODUCT_ID", id);
+                    itemView.getContext().startActivity(productDetailsIntent);
                 }
             });
         }

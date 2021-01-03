@@ -34,7 +34,6 @@ public class CategoryFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_category, container, false);
         setHasOptionsMenu(true);
-
         cateRecyclerView = (RecyclerView) view.findViewById(R.id.category_recyclerview);
 
         loaddialog = new Dialog(view.getContext());

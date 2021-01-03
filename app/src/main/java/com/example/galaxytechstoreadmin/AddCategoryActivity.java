@@ -50,7 +50,6 @@ public class AddCategoryActivity extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private ImageButton delete_img, change_img;
     private Uri uri;
-    private Boolean updatePhoto = false;
     private Dialog loadingDialog;
 
     @Override
@@ -85,6 +84,9 @@ public class AddCategoryActivity extends AppCompatActivity {
         save = (Button) findViewById(R.id.add_btn);
         cancel = (Button) findViewById(R.id.cancel_btn);
 
+        save.setEnabled(false);
+        save.setTextColor(Color.argb(50, 255, 255, 255));
+
         name.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -106,7 +108,6 @@ public class AddCategoryActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 uri = null;
-                updatePhoto = true;
                 Glide.with(getApplicationContext()).load(R.drawable.no_img).into(image);
             }
         });
@@ -141,20 +142,15 @@ public class AddCategoryActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Long gt = DBqueries.cate_index + (long) 1;
-                updatePic(gt);
+                addPic(gt);
             }
         });
     }
 
     private void checkInputs() {
         if (!TextUtils.isEmpty(name.getText())) {
-            if (!TextUtils.isEmpty(name.getText())) {
-                save.setEnabled(true);
-                save.setTextColor(Color.rgb(255, 255, 255));
-            } else {
-                save.setEnabled(false);
-                save.setTextColor(Color.argb(50, 255, 255, 255));
-            }
+            save.setEnabled(true);
+            save.setTextColor(Color.rgb(255, 255, 255));
         } else {
             save.setEnabled(false);
             save.setTextColor(Color.argb(50, 255, 255, 255));
@@ -168,7 +164,6 @@ public class AddCategoryActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 if (data != null) {
                     uri = data.getData();
-                    updatePhoto = true;
                     Glide.with(getApplicationContext()).load(uri).into(image);
                 } else {
                     Toasty.error(getApplicationContext(), "Image not found!", Toast.LENGTH_SHORT, true).show();
@@ -191,50 +186,63 @@ public class AddCategoryActivity extends AppCompatActivity {
         }
     }
 
-    private void updatePic(Long gt) {
+    private void addPic(Long gt) {
+        save.setEnabled(false);
+        save.setTextColor(Color.argb(50, 255, 255, 255));
         final StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("category_image/" + "cate_image_"+String.valueOf(gt) + ".jpg");
-        Glide.with(getApplicationContext()).asBitmap().load(uri).centerCrop().into(new ImageViewTarget<Bitmap>(image) {
-            @Override
-            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                resource.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                byte[] data = baos.toByteArray();
-                UploadTask uploadTask = storageReference.putBytes(data);
-                uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            storageReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Uri> task) {
-                                    if (task.isSuccessful()) {
-                                        uri = task.getResult();
-                                        Map<String, Object> product = new HashMap<>();
-                                        product.put("index", DBqueries.cate_index + 1);
-                                        product.put("icon", uri.toString());
-                                        product.put("categoryName", name.getText().toString());
-                                        addFields(product);
-                                    } else {
-                                        loadingDialog.dismiss();
-                                        String error = task.getException().getMessage();
-                                        Toast.makeText(getApplicationContext(), error, Toast.LENGTH_SHORT).show();
+        if (uri != null) {
+            Glide.with(getApplicationContext()).asBitmap().load(uri).centerCrop().into(new ImageViewTarget<Bitmap>(image) {
+                @Override
+                public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    resource.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    byte[] data = baos.toByteArray();
+                    UploadTask uploadTask = storageReference.putBytes(data);
+                    uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                storageReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Uri> task) {
+                                        if (task.isSuccessful()) {
+                                            uri = task.getResult();
+                                            Glide.with(getApplicationContext()).load(R.drawable.no_img).into(image);
+                                            Map<String, Object> product = new HashMap<>();
+                                            product.put("index", DBqueries.cate_index + 1);
+                                            product.put("icon", uri.toString());
+                                            product.put("categoryName", name.getText().toString());
+                                            addFields(product);
+                                        } else {
+                                            loadingDialog.dismiss();
+                                            String error = task.getException().getMessage();
+                                            Toast.makeText(getApplicationContext(), error, Toast.LENGTH_SHORT).show();
+                                        }
                                     }
-                                }
-                            });
-                        } else {
-                            loadingDialog.dismiss();
-                            String error = task.getException().getMessage();
-                            Toast.makeText(getApplicationContext(), error, Toast.LENGTH_SHORT).show();
+                                });
+                            } else {
+                                loadingDialog.dismiss();
+                                String error = task.getException().getMessage();
+                                Toast.makeText(getApplicationContext(), error, Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
-                return;
-            }
-            @Override
-            protected void setResource(@Nullable Bitmap resource) {
-                image.setImageResource(R.drawable.no_img);
-            }
-        });
+                    });
+                    return;
+                }
+
+                @Override
+                protected void setResource(@Nullable Bitmap resource) {
+                    image.setImageResource(R.drawable.no_img);
+                }
+            });
+        }
+        else {
+            Map<String, Object> product = new HashMap<>();
+            product.put("index", DBqueries.cate_index + 1);
+            product.put("icon", "");
+            product.put("categoryName", name.getText().toString());
+            addFields(product);
+        }
     }
 
     private void addFields(final Map<String, Object> categoryData){

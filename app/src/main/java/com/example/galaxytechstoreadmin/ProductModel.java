@@ -16,8 +16,9 @@ public class ProductModel {
     private ArrayList<String> tags;
     private String Category_Id;
     private String Brand_Id;
+    private long index;
 
-    public ProductModel(String productID, String productImage, String productDesc, String productTitle, String average_Ratings, long total_Ratings, String productPrice, String cuttedPrice, Boolean COD, Boolean inStock, String category_Id, String brand_Id) {
+    public ProductModel(String productID, String productImage, String productDesc, String productTitle, String average_Ratings, long total_Ratings, String productPrice, String cuttedPrice, Boolean COD, Boolean inStock, String category_Id, String brand_Id, long index) {
         this.productID = productID;
         this.productImage = productImage;
         this.productDesc = productDesc;
@@ -30,6 +31,7 @@ public class ProductModel {
         this.inStock = inStock;
         Category_Id = category_Id;
         Brand_Id = brand_Id;
+        this.index = index;
     }
 
     public String getProductID() {
@@ -134,5 +136,13 @@ public class ProductModel {
 
     public void setBrand_Id(String brand_Id) {
         Brand_Id = brand_Id;
+    }
+
+    public long getIndex() {
+        return index;
+    }
+
+    public void setIndex(long index) {
+        this.index = index;
     }
 }

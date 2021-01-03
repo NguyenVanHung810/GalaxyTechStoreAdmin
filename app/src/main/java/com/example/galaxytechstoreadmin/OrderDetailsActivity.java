@@ -1,6 +1,8 @@
 package com.example.galaxytechstoreadmin;
 
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -37,9 +40,9 @@ public class OrderDetailsActivity extends AppCompatActivity {
 
     private TextView orderId, ordered_Date, orderStatus;
 
-    private ListView listView;
-    private ArrayList<ProductsInOrderModel> products;
-    private ProductsInOrderAdapter adapter;
+    private Button view;
+
+    public static ArrayList<ProductsInOrderModel> products;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -47,7 +50,9 @@ public class OrderDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_details);
 
-        listView = findViewById(R.id.product_list);
+        position = getIntent().getIntExtra("position", -1);
+        final OrderItemModel orderItemModel = DBqueries.orderItemModelList.get(position);
+        products = orderItemModel.getProducts();
 
         orderedIndicator = findViewById(R.id.ordered_indicator);
         packedIndicator = findViewById(R.id.packed_indicator);
@@ -86,6 +91,8 @@ public class OrderDetailsActivity extends AppCompatActivity {
         ordered_Date = findViewById(R.id.ordered_date);
         orderStatus = findViewById(R.id.order_status);
 
+        view = findViewById(R.id.view_details);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Xem chi tiết đơn hàng");
@@ -98,10 +105,6 @@ public class OrderDetailsActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        position = getIntent().getIntExtra("position", -1);
-        final OrderItemModel orderItemModel = DBqueries.orderItemModelList.get(position);
-
-        products = orderItemModel.getProducts();
 
         simpleDateFormat = new SimpleDateFormat("EEE, dd MMM YYYY hh:mm aa");
         orderId.setText("Mã đơn hàng: "+orderItemModel.getOrderId());
@@ -109,10 +112,13 @@ public class OrderDetailsActivity extends AppCompatActivity {
         orderStatus.setText(orderItemModel.getOrderStatus());
 
 
-
-        adapter = new ProductsInOrderAdapter(getApplicationContext(), R.layout.products_in_order_layout, products);
-        listView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent pioIntent = new Intent(getApplicationContext(), ProductInOrderActivity.class);
+                startActivity(pioIntent);
+            }
+        });
 
         switch (orderItemModel.getOrderStatus()) {
             case "Ordered":

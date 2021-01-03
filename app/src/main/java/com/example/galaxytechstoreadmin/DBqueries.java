@@ -28,7 +28,7 @@ public class DBqueries {
     public static List<Long> longList = new ArrayList<>();
     public static long product_index;
     public static long cate_index;
-
+    public static long brand_index;
     public static int s = 0;
 
     public static int productTotals = 0;
@@ -54,6 +54,7 @@ public class DBqueries {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                        brand_index = 0;
                         if(s==0){
                             s = -1;
                         }
@@ -67,8 +68,10 @@ public class DBqueries {
                                         for (DocumentSnapshot snapshot: task.getResult()){
                                             brandModelList.add(new BrandModel(
                                                     snapshot.getId(),
-                                                    snapshot.get("layout_title").toString()
+                                                    snapshot.get("layout_title").toString(),
+                                                    documentSnapshot.getId()
                                             ));
+                                            brand_index = (long)snapshot.get("index");
                                         }
                                     }
                                 }
@@ -78,6 +81,7 @@ public class DBqueries {
                                     documentSnapshot.get("icon").toString(),
                                     documentSnapshot.get("categoryName").toString(),
                                     (long)documentSnapshot.get("index"),
+                                    brand_index,
                                     brandModelList
                             ));
                         }
@@ -114,7 +118,8 @@ public class DBqueries {
                                 (boolean) documentSnapshot.get("COD"),
                                 (boolean) documentSnapshot.get("in_stock"),
                                 documentSnapshot.get("Category_Id").toString(),
-                                documentSnapshot.get("Brand_Id").toString()
+                                documentSnapshot.get("Brand_Id").toString(),
+                                (long) documentSnapshot.get("index")
                         ));
                         product_index = (long)documentSnapshot.get("index");
                     }
@@ -138,7 +143,7 @@ public class DBqueries {
                     for (DocumentSnapshot documentSnapshot: task.getResult()){
                         ArrayList<ProductsInOrderModel> products = new ArrayList<>();
                         firebaseFirestore.collection("ORDERS").document(documentSnapshot.getId())
-                                .collection("ORDER_ITEMS").orderBy("index").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                .collection("ORDER_ITEMS").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 for(DocumentSnapshot snapshot: task.getResult()){
