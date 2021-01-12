@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import static com.example.galaxytechstoreadmin.MainActivity.currentFragment;
+import static com.example.galaxytechstoreadmin.MainActivity.navigationView;
 
 
 public class HomeFragment extends Fragment {
@@ -115,5 +116,20 @@ public class HomeFragment extends Fragment {
         ((AppCompatActivity) getContext()).getSupportActionBar().setTitle(tt);
         getActivity().invalidateOptionsMenu();
         setFragment(fragment, FragmentNo);
+        if(FragmentNo == MainActivity.ProductFragment){
+            navigationView.getMenu().getItem(2).setChecked(true);
+        }
+
+        if(FragmentNo == MainActivity.OrdersFragment){
+            navigationView.getMenu().getItem(1).setChecked(true);
+        }
+
+        if(FragmentNo == MainActivity.CategoryFragment){
+            navigationView.getMenu().getItem(3).setChecked(true);
+        }
+
+        if(FragmentNo == MainActivity.AccountFragment){
+            navigationView.getMenu().getItem(4).setChecked(true);
+        }
     }
 }

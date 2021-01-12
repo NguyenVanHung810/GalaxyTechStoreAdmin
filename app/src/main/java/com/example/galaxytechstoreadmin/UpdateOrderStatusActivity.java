@@ -8,6 +8,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.annotation.NonNull;
@@ -23,6 +25,8 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import es.dmoral.toasty.Toasty;
 
@@ -95,15 +99,55 @@ public class UpdateOrderStatusActivity extends AppCompatActivity {
             }
         });
 
+
+
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Map<String, Object> od = new HashMap<>();
+                od.put("Order_Status", status);
+
+                if(status != null && status.equals("Packed")){
+                    od.put("Packed_Date", Timestamp.now());
+                }
+                if(status != null && status.equals("Shipped")){
+                    od.put("Shipped_Date", Timestamp.now());
+                }
+                if(status != null && status.equals("Delivered")){
+                    od.put("Payment_status","Đã thanh toán");
+                    od.put("Delivered_Date", Timestamp.now());
+                }
+                if(status != null && status.equals("Cancelled")){
+                    od.put("Cancelled_Date", Timestamp.now());
+                }
                 FirebaseFirestore.getInstance().collection("ORDERS").document(intent.getStringExtra("id"))
-                        .update("Order_Status", status).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        .update(od).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()){
+                            Map<String, Object> noti = new HashMap<>();
+                            noti.put("image", "https://www.pngkit.com/png/full/278-2784520_repeat-order-html-icon-repeat-order-icon-png.png");
+                            noti.put("readed", false);
+                            if(status.equals("Packed")){
+                                noti.put("content", "Đơn hàng "+orderItemModel.getOrderId()+" đã được đóng gói.");
+                            }
+                            if(status.equals("Shipped")){
+                                noti.put("content", "Đơn hàng "+orderItemModel.getOrderId()+" đã được vận chuyển.");
+                            }
+                            if(status.equals("out for Delivery")){
+                                noti.put("content", "Đơn hàng "+orderItemModel.getOrderId()+" đang được ra ngoài giao đến bạn.");
+                            }
+                            if(status.equals("Delivered")){
+                                noti.put("content", "Đơn hàng "+orderItemModel.getOrderId()+" đã được giao đến bạn.");
+                            }
+                            if(status.equals("Cancelled")){
+                                noti.put("content", "Đơn hàng "+orderItemModel.getOrderId()+" đã được hủy.");
+                            }
                             Toasty.success(getApplicationContext(), "Cập nhật thành công !!!", Toasty.LENGTH_SHORT).show();
+                            FirebaseFirestore.getInstance().collection("USERS").document(orderItemModel.getUserId())
+                                    .collection("USER_DATA").document("MY_NOTIFICATIONS")
+                                    .collection("MY_ORDER_NOTIFICATIONS")
+                                    .add(noti);
                             finish();
                         }
                         else {

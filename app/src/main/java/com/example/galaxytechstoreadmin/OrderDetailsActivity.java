@@ -209,7 +209,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
                 S_D_progress.setProgress(100);
 
                 deliveredTitle.setText("Out for Delivery");
-                deliveredBody.setText("Đơn đặt hàng của bạn đã được giao");
+                deliveredBody.setText("Đơn hàng đang trên đường giao hàng.");
 
                 break;
             case "Delivered":

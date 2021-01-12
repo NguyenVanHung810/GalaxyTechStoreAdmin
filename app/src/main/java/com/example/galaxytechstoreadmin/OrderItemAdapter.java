@@ -42,9 +42,8 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.View
         String orderId = orderItemModelList.get(position).getOrderId();
         String orderStatus=orderItemModelList.get(position).getOrderStatus();
         Date orderDate = orderItemModelList.get(position).getOrderedDate();
-        Boolean cr = orderItemModelList.get(position).isCancellationrequested();
         String cus = orderItemModelList.get(position).getFullName();
-        holder.setdata(orderId, orderStatus,orderDate, cr, cus, position);
+        holder.setdata(orderId, orderStatus,orderDate, cus, position);
     }
 
     @Override
@@ -71,7 +70,7 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.View
         }
 
         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-        private void setdata(String id, String status, Date ordereddate, Boolean cr, String customer, final int position){
+        private void setdata(String id, String status, Date ordereddate, String customer, final int position){
             SimpleDateFormat simpleDateFormat=new SimpleDateFormat("EEE, dd MMM YYYY hh:mm aa");
 
             orderId.setText("Mã đơn hàng: "+id);
@@ -82,34 +81,28 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.View
 
             ArrayList<String> statusList = new ArrayList<>();
 
-            if(status.equals("Ordered")){
-                if(cr){
-                    order_item_layout.setBackgroundResource(R.color.md_red_300);
-                    statusList.add("Cancelled");
-                }
-                else {
-                    statusList.add("Packed");
-                    statusList.add("Cancelled");
-                }
+            if(status != null && status.equals("Ordered")){
+                statusList.add("Packed");
+                statusList.add("Cancelled");
             }
-            else if(status.equals("Packed")){
-                if(cr){
-                    order_item_layout.setBackgroundResource(R.color.md_red_300);
-                    statusList.add("Cancelled");
-                }
-                else {
-                    statusList.add("Shipped");
-                    statusList.add("Cancelled");
-                }
+            else if(status != null && status.equals("Packed")){
+                statusList.add("Shipped");
             }
-            else if(status.equals("Shipped")){
+            else if(status != null && status.equals("Shipped")){
+                statusList.add("out for Delivery");
+            }
+            else if(status != null && status.equals("out for Delivery")){
                 statusList.add("Delivered");
             }
-            else if(status.equals("Delivered")){
+            else if(status != null && status.equals("Delivered")){
+                orderStatus.setTextColor(itemView.getContext().getResources().getColor(R.color.white));
+                order_item_layout.setBackgroundColor(itemView.getContext().getResources().getColor(R.color.md_green_400));
                 update_order_status.setImageResource(R.drawable.success_order);
                 update_order_status.setEnabled(false);
             }
-            else if(status.equals("Cancelled")){
+            else if(status != null && status.equals("Cancelled")){
+                orderStatus.setTextColor(itemView.getContext().getResources().getColor(R.color.white));
+                order_item_layout.setBackgroundColor(itemView.getContext().getResources().getColor(R.color.md_red_400));
                 update_order_status.setImageResource(R.drawable.cancel_order);
                 update_order_status.setEnabled(false);
             }

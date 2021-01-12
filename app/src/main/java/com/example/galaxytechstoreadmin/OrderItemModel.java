@@ -5,19 +5,20 @@ import java.util.Date;
 
 public class OrderItemModel {
 
+    private String userId;
     private String orderId;
     private String orderStatus;
     private String address, fullName, phoneNumber;
     private Date orderedDate,packedDate,shippedDate,delveredDate,cancelleddate;
     private String paymentMethod;
     private String deliveryPrice;
-    private boolean cancellationrequested;
     private Long totalItems;
     private String discountedPrice;
     private Long totalItemsPrice;
     private ArrayList<ProductsInOrderModel> products;
 
-    public OrderItemModel(String orderId, String orderStatus, String address, String fullName, String phoneNumber, Date orderedDate, Date packedDate, Date shippedDate, Date delveredDate, Date cancelleddate, String paymentMethod, String deliveryPrice, boolean cancellationrequested, Long totalItems, String discountedPrice, Long totalItemsPrice, ArrayList<ProductsInOrderModel> products) {
+    public OrderItemModel(String userId,String orderId, String orderStatus, String address, String fullName, String phoneNumber, Date orderedDate, Date packedDate, Date shippedDate, Date delveredDate, Date cancelleddate, String paymentMethod, String deliveryPrice, Long totalItems, String discountedPrice, Long totalItemsPrice, ArrayList<ProductsInOrderModel> products) {
+        this.userId = userId;
         this.orderId = orderId;
         this.orderStatus = orderStatus;
         this.address = address;
@@ -30,11 +31,18 @@ public class OrderItemModel {
         this.cancelleddate = cancelleddate;
         this.paymentMethod = paymentMethod;
         this.deliveryPrice = deliveryPrice;
-        this.cancellationrequested = cancellationrequested;
         this.totalItems = totalItems;
         this.discountedPrice = discountedPrice;
         this.totalItemsPrice = totalItemsPrice;
         this.products = products;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getOrderId() {
@@ -131,14 +139,6 @@ public class OrderItemModel {
 
     public void setDeliveryPrice(String deliveryPrice) {
         this.deliveryPrice = deliveryPrice;
-    }
-
-    public boolean isCancellationrequested() {
-        return cancellationrequested;
-    }
-
-    public void setCancellationrequested(boolean cancellationrequested) {
-        this.cancellationrequested = cancellationrequested;
     }
 
     public Long getTotalItems() {

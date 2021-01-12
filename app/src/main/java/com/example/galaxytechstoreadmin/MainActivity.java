@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Window window;
     private AppBarLayout.LayoutParams layoutParams;
     public static DrawerLayout drawer;
-    private NavigationView navigationView;
+    public static NavigationView navigationView;
     public static ImageView actionbar_name;
     private int scrollFlags;
     public static int currentFragment = -1;

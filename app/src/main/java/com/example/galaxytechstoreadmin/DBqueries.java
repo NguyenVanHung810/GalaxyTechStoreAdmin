@@ -157,6 +157,7 @@ public class DBqueries {
                             }
                         });
                         OrderItemModel orderItemModel = new OrderItemModel(
+                                documentSnapshot.getString("User_Id"),
                                 documentSnapshot.getId(),
                                 documentSnapshot.getString("Order_Status"),
                                 documentSnapshot.getString("Address"),
@@ -169,7 +170,6 @@ public class DBqueries {
                                 (Date) documentSnapshot.getDate("Cancelled_Date"),
                                 documentSnapshot.getString("Payment_Method"),
                                 documentSnapshot.getString("Delivery_Price"),
-                                (boolean)documentSnapshot.get("Cancellation_requested"),
                                 (long) documentSnapshot.get("Total_Items"),
                                 documentSnapshot.get("Discounted_Price").toString(),
                                 (Long) documentSnapshot.get("Total_Items_Price"),
